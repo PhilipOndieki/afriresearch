@@ -1,0 +1,299 @@
+// Prisma schema for Insight AfriResearch Ltd
+// MySQL via Railway · deployed on Vercel
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Projects
+// ─────────────────────────────────────────────
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique @db.VarChar(200)
+  title       String   @db.VarChar(300)
+  subtitle    String?  @db.VarChar(500)
+  description String   @db.Text
+  status      ProjectStatus @default(PUBLISHED)
+  featured    Boolean  @default(false)
+  year        Int
+  location    String   @db.VarChar(200)
+  client      String?  @db.VarChar(200)
+  coverImage  String   @db.VarChar(500)
+  heroImage   String?  @db.VarChar(500)
+  categoryId  Int
+  serviceId   Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    ProjectCategory @relation(fields: [categoryId], references: [id])
+  service     Service?        @relation(fields: [serviceId], references: [id])
+  images      ProjectImage[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([featured])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model ProjectImage {
+  id        Int    @id @default(autoincrement())
+  projectId Int
+  url       String @db.VarChar(500)
+  alt       String @db.VarChar(300)
+  caption   String? @db.VarChar(500)
+  sortOrder Int    @default(0)
+  isCover   Boolean @default(false)
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("project_images")
+}
+
+model ProjectCategory {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(100)
+  slug        String    @unique @db.VarChar(100)
+  description String?   @db.Text
+  projects    Project[]
+
+  @@index([slug])
+  @@map("project_categories")
+}
+
+// ─────────────────────────────────────────────
+// Services
+// ─────────────────────────────────────────────
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique @db.VarChar(100)
+  name        String   @db.VarChar(200)
+  headline    String   @db.VarChar(300)
+  description String   @db.Text
+  heroImage   String   @db.VarChar(500)
+  sortOrder   Int      @default(0)
+  projects    Project[]
+
+  @@index([slug])
+  @@map("services")
+}
+
+// ─────────────────────────────────────────────
+// Team
+// ─────────────────────────────────────────────
+
+model TeamMember {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(200)
+  role        String   @db.VarChar(200)
+  bio         String   @db.Text
+  photo       String   @db.VarChar(500)
+  email       String?  @db.VarChar(200)
+  linkedin    String?  @db.VarChar(300)
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@index([isActive])
+  @@map("team_members")
+}
+
+// ─────────────────────────────────────────────
+// Enquiries
+// ─────────────────────────────────────────────
+
+model Enquiry {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar(200)
+  email           String        @db.VarChar(200)
+  phone           String?       @db.VarChar(30)
+  organization    String?       @db.VarChar(200)
+  serviceInterest String?       @db.VarChar(100)
+  message         String        @db.Text
+  attachmentUrl   String?       @db.VarChar(500)
+  status          EnquiryStatus @default(NEW)
+  notes           String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("enquiries")
+}
+
+enum EnquiryStatus {
+  NEW
+  READ
+  REPLIED
+  CLOSED
+}
+
+// ─────────────────────────────────────────────
+// Training
+// ─────────────────────────────────────────────
+
+model TrainingProgram {
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique @db.VarChar(200)
+  title       String    @db.VarChar(300)
+  description String    @db.Text
+  duration    String    @db.VarChar(100)
+  targetGroup String    @db.VarChar(300)
+  heroImage   String    @db.VarChar(500)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  sessions    TrainingSession[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("training_programs")
+}
+
+model TrainingSession {
+  id          Int                @id @default(autoincrement())
+  programId   Int
+  startDate   DateTime
+  endDate     DateTime
+  location    String             @db.VarChar(300)
+  venue       String?            @db.VarChar(300)
+  fee         Decimal            @db.Decimal(10, 2)
+  currency    String             @default("KES") @db.VarChar(3)
+  capacity    Int
+  status      SessionStatus      @default(OPEN)
+  createdAt   DateTime           @default(now())
+
+  program         TrainingProgram        @relation(fields: [programId], references: [id])
+  registrations   TrainingRegistration[]
+
+  @@index([programId])
+  @@index([startDate])
+  @@index([status])
+  @@map("training_sessions")
+}
+
+enum SessionStatus {
+  OPEN
+  FULL
+  CANCELLED
+  COMPLETED
+}
+
+model TrainingRegistration {
+  id          Int                @id @default(autoincrement())
+  sessionId   Int
+  name        String             @db.VarChar(200)
+  email       String             @db.VarChar(200)
+  phone       String             @db.VarChar(30)
+  organization String?           @db.VarChar(200)
+  paymentStatus PaymentStatus    @default(PENDING)
+  paymentRef  String?            @db.VarChar(100)
+  createdAt   DateTime           @default(now())
+
+  session     TrainingSession @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId])
+  @@index([email])
+  @@map("training_registrations")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+// ─────────────────────────────────────────────
+// Admin
+// ─────────────────────────────────────────────
+
+model AdminUser {
+  id            String    @id @default(cuid())
+  name          String?   @db.VarChar(200)
+  email         String    @unique @db.VarChar(200)
+  emailVerified DateTime?
+  image         String?   @db.VarChar(500)
+  role          AdminRole @default(EDITOR)
+  createdAt     DateTime  @default(now())
+
+  accounts  Account[]
+  sessions  Session[]
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─────────────────────────────────────────────
+// Site Settings
+// ─────────────────────────────────────────────
+
+model SiteSetting {
+  key       String   @id @db.VarChar(100)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}

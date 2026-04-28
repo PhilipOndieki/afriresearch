@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAFAF7;
+    --foreground: #1A1A1A;
+    --accent: #C2642A;
+    --muted: #6B6B6B;
+    --border: #E5E5E0;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #C2642A;
+    color: #FAFAF7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply max-w-site mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
+  }
+
+  .container-content {
+    @apply max-w-content mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-pad {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .section-pad-sm {
+    @apply py-10 md:py-16 lg:py-20;
+  }
+
+  .label-text {
+    @apply text-label-md uppercase tracking-widest font-sans text-muted;
+  }
+
+  .serif-display {
+    @apply font-serif font-normal;
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-accent after:transition-all after:duration-400 after:ease-expo-out hover:after:w-full;
+  }
+
+  .image-reveal {
+    overflow: hidden;
+  }
+
+  .image-reveal img {
+    transform: scale(1.05);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .image-reveal:hover img {
+    transform: scale(1);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3 bg-foreground text-background font-sans text-label-md uppercase tracking-widest transition-all duration-400 ease-expo-out hover:bg-accent;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-8 py-3 border border-foreground text-foreground font-sans text-label-md uppercase tracking-widest transition-all duration-400 ease-expo-out hover:bg-foreground hover:text-background;
+  }
+
+  .btn-text {
+    @apply inline-flex items-center gap-2 font-sans text-label-md uppercase tracking-widest text-foreground transition-colors duration-300 hover:text-accent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

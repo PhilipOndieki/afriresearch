@@ -42,6 +42,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@next/swc-linux-x64-gnu": "^16.2.4",
     "@types/node": "^20.14.2",
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18.3.3",

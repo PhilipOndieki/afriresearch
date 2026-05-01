@@ -204,13 +204,6 @@ export function HeroSlideshow() {
           !headlineVisible && 'opacity-0',
         )}
       >
-        <h1 className="font-serif text-display-2xl text-background mb-4 leading-none text-balance max-w-4xl">
-          Design. <span className="text-accent">Research.</span> Training.
-        </h1>
-        <p className="font-sans text-body-xl text-background/65 max-w-lg mb-8">
-          Nairobi-based multidisciplinary firm delivering architecture, engineering, and research
-          across East Africa.
-        </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
             data-hero-cta

@@ -8,38 +8,20 @@ import { FadeUp } from '@/components/animations/FadeUp';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { ParallaxImage } from '@/components/animations/ParallaxImage';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
+import { getProjectBySlug, getRelatedProjects, getPublishedProjects } from '@/config/projects';
+import { getServiceById } from '@/config/services';
 import type { Metadata } from 'next';
 
 type Props = { params: { slug: string } };
 
-async function getProject(slug: string) {
-  return db.project.findUnique({
-    where: { slug },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: 'asc' } },
-      service: true,
-    },
-  });
-}
+export const dynamicParams = false;
 
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    const projects = await db.project.findMany({
-      where: { status: 'PUBLISHED' },
-      select: { slug: true },
-    });
-    return projects.map(({ slug }) => ({ slug }));
-  } catch {
-    return [];
-  }
+export function generateStaticParams() {
+  return getPublishedProjects().map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await getProject(params.slug);
+  const project = getProjectBySlug(params.slug);
   if (!project) return {};
   return buildMetadata({
     title: project.title,
@@ -49,19 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-async function getRelatedProjects(categoryId: number, excludeSlug: string) {
-  return db.project.findMany({
-    where: { status: 'PUBLISHED', categoryId, NOT: { slug: excludeSlug } },
-    include: { category: true, images: { take: 3, orderBy: { sortOrder: 'asc' } } },
-    take: 3,
-  });
-}
-
-export default async function ProjectPage({ params }: Props) {
-  const project = await getProject(params.slug);
+export default function ProjectPage({ params }: Props) {
+  const project = getProjectBySlug(params.slug);
   if (!project) notFound();
 
-  const related = await getRelatedProjects(project.categoryId, project.slug);
+  const related = getRelatedProjects(project.categoryId, project.slug);
+  const service = project.serviceId ? getServiceById(project.serviceId) : null;
 
   const projectSchema = {
     '@context': 'https://schema.org',
@@ -126,7 +101,6 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </FadeUp>
 
-            {/* Gallery */}
             {project.images.length > 0 && (
               <FadeUp delay={0.1} className="mt-12">
                 <h2 className="font-serif text-display-sm text-foreground mb-6">Photography</h2>
@@ -160,10 +134,10 @@ export default async function ProjectPage({ params }: Props) {
                 <p className="label-text mb-1">Category</p>
                 <p className="font-sans text-body-md text-foreground">{project.category.name}</p>
               </div>
-              {project.service && (
+              {service && (
                 <div>
                   <p className="label-text mb-1">Service</p>
-                  <p className="font-sans text-body-md text-foreground">{project.service.name}</p>
+                  <p className="font-sans text-body-md text-foreground">{service.name}</p>
                 </div>
               )}
               <div className="pt-4 border-t border-border">
@@ -186,15 +160,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {related.map((p, i) => (
                 <FadeUp key={p.slug} delay={i * 0.1}>
-                  <ProjectCard
-                    project={{
-                      ...p,
-                      createdAt: p.createdAt.toISOString(),
-                      updatedAt: p.updatedAt.toISOString(),
-                      status: p.status as 'PUBLISHED' | 'DRAFT' | 'ARCHIVED',
-                    }}
-                    images={p.images.map((img) => img.url)}
-                  />
+                  <ProjectCard project={p} images={p.images.map((img) => img.url)} />
                 </FadeUp>
               ))}
             </div>

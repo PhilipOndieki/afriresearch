@@ -24,7 +24,8 @@ export function ServiceCard({ service, className }: ServiceCardProps) {
       <h3 className="font-serif text-display-sm text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
         {service.name}
       </h3>
-      <p className="font-sans text-body-sm text-muted line-clamp-2">{service.headline}</p>
+      {/* Bumped from text-body-sm — headline is substantive card copy */}
+      <p className="font-sans text-body-md text-muted line-clamp-2">{service.headline}</p>
     </Link>
   );
 }

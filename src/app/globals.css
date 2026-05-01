@@ -51,12 +51,19 @@
     @apply max-w-content mx-auto px-4 sm:px-6 lg:px-8;
   }
 
+  /* Default section padding — tightened from py-16/24/32 per Part 5 */
   .section-pad {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-12 md:py-20 lg:py-24;
   }
 
+  /* Legacy alias — kept so existing usages don't break */
   .section-pad-sm {
     @apply py-10 md:py-16 lg:py-20;
+  }
+
+  /* Tight variant for sections that sit close to a neighbour without a full-bleed divider */
+  .section-pad-tight {
+    @apply py-10 md:py-14 lg:py-16;
   }
 
   .label-text {

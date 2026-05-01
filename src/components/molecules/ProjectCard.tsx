@@ -65,7 +65,8 @@ export function ProjectCard({ project, images = [], className }: ProjectCardProp
           {project.title}
         </h3>
         {project.subtitle && (
-          <p className="font-sans text-body-sm text-muted mt-1 line-clamp-2">{project.subtitle}</p>
+          /* Bumped from text-body-sm — subtitle is substantive card copy */
+          <p className="font-sans text-body-md text-muted mt-1 line-clamp-2">{project.subtitle}</p>
         )}
       </div>
     </Link>

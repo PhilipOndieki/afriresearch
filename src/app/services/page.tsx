@@ -4,8 +4,8 @@ import { ServicesEditorial } from '@/components/organisms/ServicesEditorial';
 import { SectionHeading } from '@/components/molecules/SectionHeading';
 import { FadeUp } from '@/components/animations/FadeUp';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
 import { images } from '@/config/images';
+import { services } from '@/config/services';
 
 export const metadata = buildMetadata({
   title: 'Services',
@@ -14,15 +14,7 @@ export const metadata = buildMetadata({
   canonical: '/services',
 });
 
-export const dynamic = 'force-dynamic';
-
-async function getServices() {
-  return db.service.findMany({ orderBy: { sortOrder: 'asc' } });
-}
-
-export default async function ServicesPage() {
-  const services = await getServices();
-
+export default function ServicesPage() {
   return (
     <PageShell>
       {/* Page header */}

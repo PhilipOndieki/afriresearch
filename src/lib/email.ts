@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import type { TrainingSession } from '@/types/training';
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'noreply@insightafriresearch.com';
 const ADMIN = process.env.ADMIN_EMAIL ?? 'insightafri@gmail.com';
@@ -72,6 +73,33 @@ export async function sendTrainingRegistrationConfirmation(
       <p><strong>Fee:</strong> KES ${fee.toLocaleString()}</p>
       <p>Payment instructions will follow separately.</p>
       <p>Insight AfriResearch Ltd<br>insightafri@gmail.com | 020 800 5000</p>
+    `,
+  });
+}
+
+export async function sendTrainingRegistrationNotification(
+  data: { name: string; email: string; phone: string; organization?: string },
+  session: TrainingSession,
+) {
+  if (!process.env.RESEND_API_KEY) return;
+  const programTitle = session.program?.title ?? `Session ${session.id}`;
+  const startDate = new Date(session.startDate).toLocaleDateString('en-KE', { dateStyle: 'long' });
+  await getResend().emails.send({
+    from: FROM,
+    to: ADMIN,
+    subject: `New training registration: ${programTitle} — ${data.name}`,
+    html: `
+      <h2>New Training Registration</h2>
+      <p><strong>Programme:</strong> ${programTitle}</p>
+      <p><strong>Session start:</strong> ${startDate}</p>
+      <p><strong>Venue:</strong> ${session.venue ?? session.location}</p>
+      <hr>
+      <p><strong>Name:</strong> ${data.name}</p>
+      <p><strong>Email:</strong> ${data.email}</p>
+      <p><strong>Phone:</strong> ${data.phone}</p>
+      ${data.organization ? `<p><strong>Organisation:</strong> ${data.organization}</p>` : ''}
+      <hr>
+      <p><strong>Fee:</strong> KES ${session.fee.toLocaleString()}</p>
     `,
   });
 }

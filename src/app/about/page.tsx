@@ -5,18 +5,18 @@ import { SectionHeading } from '@/components/molecules/SectionHeading';
 import { FadeUp } from '@/components/animations/FadeUp';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { ParallaxImage } from '@/components/animations/ParallaxImage';
+import { ScrollColourScene } from '@/components/animations/ScrollColourScene';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
 import { images } from '@/config/images';
 import { siteConfig } from '@/config/site';
+import { tokens } from '@/config/tokens';
+import { team } from '@/config/team';
 
 export const metadata = buildMetadata({
   title: 'About',
   description: 'Insight AfriResearch Ltd — who we are, our story, values, team, and credentials.',
   canonical: '/about',
 });
-
-export const dynamic = 'force-dynamic';
 
 const values = [
   {
@@ -53,12 +53,9 @@ const orgSchema = {
   email: siteConfig.contact.email,
 };
 
-export default async function AboutPage() {
-  const team = await db.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: { sortOrder: 'asc' },
-  });
+const activeTeam = team.filter((m) => m.isActive);
 
+export default function AboutPage() {
   return (
     <PageShell>
       <script
@@ -142,7 +139,7 @@ export default async function AboutPage() {
       </ParallaxImage>
 
       {/* Values */}
-      <section className="section-pad container-site">
+      <section className="section-pad-tight container-site">
         <SectionHeading
           label="What drives us"
           title="Four values. No exceptions."
@@ -160,23 +157,25 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="section-pad bg-surface">
-        <div className="container-site">
-          <SectionHeading
-            label="The team"
-            title="Professionals you can call by name."
-            className="mb-12"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, i) => (
-              <FadeUp key={member.id} delay={i * 0.1}>
-                <TeamCard member={member} />
-              </FadeUp>
-            ))}
+      {/* Team — dark colour scene */}
+      <ScrollColourScene bgColor={tokens.colors.foreground} fgColor={tokens.colors.background}>
+        <section className="section-pad bg-foreground">
+          <div className="container-site">
+            <SectionHeading
+              label="The team"
+              title="Professionals you can call by name."
+              className="mb-12 [&_h2]:text-background [&_.label-text]:text-background/50"
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {activeTeam.map((member, i) => (
+                <FadeUp key={member.id} delay={i * 0.1}>
+                  <TeamCard member={member} />
+                </FadeUp>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollColourScene>
 
       {/* Credentials */}
       <section className="section-pad container-site">

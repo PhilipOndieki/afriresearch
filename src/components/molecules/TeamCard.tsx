@@ -21,7 +21,8 @@ export function TeamCard({ member, className }: TeamCardProps) {
       </div>
       <h3 className="font-serif text-display-sm text-foreground mb-1">{member.name}</h3>
       <p className="label-text mb-3">{member.role}</p>
-      <p className="font-sans text-body-sm text-muted line-clamp-4">{member.bio}</p>
+      {/* Bumped from text-body-sm — bio is substantive copy */}
+      <p className="font-sans text-body-md text-muted line-clamp-4">{member.bio}</p>
     </div>
   );
 }

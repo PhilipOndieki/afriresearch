@@ -37,12 +37,14 @@ const config: Config = {
         'display-md': ['clamp(1.5rem, 3vw, 3rem)', { lineHeight: '1.15', letterSpacing: '-0.01em' }],
         'display-sm': ['clamp(1.25rem, 2.5vw, 2rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
         'body-xl': ['1.25rem', { lineHeight: '1.6' }],
-        'body-lg': ['1.125rem', { lineHeight: '1.65' }],
-        'body-md': ['1rem', { lineHeight: '1.7' }],
-        'body-sm': ['0.875rem', { lineHeight: '1.6' }],
+        // Bumped up for readability per Part 6
+        'body-lg': ['1.1875rem', { lineHeight: '1.65' }],
+        'body-md': ['1.0625rem', { lineHeight: '1.7' }],
+        'body-sm': ['0.9375rem', { lineHeight: '1.6' }],
         'label-lg': ['0.9375rem', { lineHeight: '1.4', letterSpacing: '0.08em' }],
-        'label-md': ['0.8125rem', { lineHeight: '1.4', letterSpacing: '0.1em' }],
-        'label-sm': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0.12em' }],
+        // Bumped up per Part 6
+        'label-md': ['0.875rem', { lineHeight: '1.4', letterSpacing: '0.1em' }],
+        'label-sm': ['0.8125rem', { lineHeight: '1.4', letterSpacing: '0.12em' }],
       },
       spacing: {
         '1': '8px',

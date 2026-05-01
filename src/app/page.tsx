@@ -2,40 +2,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar } from '@/components/organisms/Navbar';
 import { Footer } from '@/components/organisms/Footer';
-import { HeroTextureSlider } from '@/components/organisms/HeroTextureSlider';
+import { HeroSlideshow } from '@/components/organisms/HeroSlideshow';
 import { EnquiryForm } from '@/components/organisms/EnquiryForm';
 import { ProjectCard } from '@/components/molecules/ProjectCard';
 import { SectionHeading } from '@/components/molecules/SectionHeading';
 import { FadeUp } from '@/components/animations/FadeUp';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { ParallaxImage } from '@/components/animations/ParallaxImage';
+import { ScrollColourScene } from '@/components/animations/ScrollColourScene';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
 import { images } from '@/config/images';
 import { siteConfig } from '@/config/site';
-import type { ProjectWithRelations } from '@/types/project';
+import { tokens } from '@/config/tokens';
+import { getFeaturedProjects } from '@/config/projects';
+import { services } from '@/config/services';
 
 export const metadata = buildMetadata();
-export const dynamic = 'force-dynamic';
-
-async function getFeaturedProjects(): Promise<ProjectWithRelations[]> {
-  const projects = await db.project.findMany({
-    where: { status: 'PUBLISHED', featured: true },
-    include: { category: true, images: { orderBy: { sortOrder: 'asc' } } },
-    orderBy: { year: 'desc' },
-    take: 3,
-  });
-  return projects.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-    status: p.status as 'PUBLISHED' | 'DRAFT' | 'ARCHIVED',
-  }));
-}
-
-async function getServices() {
-  return db.service.findMany({ orderBy: { sortOrder: 'asc' } });
-}
 
 const clientTypes = [
   'Government Ministries',
@@ -53,15 +35,15 @@ const stats = [
   { value: '4', label: 'Countries' },
 ];
 
-export default async function HomePage() {
-  const [featuredProjects, services] = await Promise.all([getFeaturedProjects(), getServices()]);
+export default function HomePage() {
+  const featuredProjects = getFeaturedProjects();
 
   return (
     <>
       <Navbar />
       <main>
         {/* Hero */}
-        <HeroTextureSlider />
+        <HeroSlideshow />
 
         {/* Who we are — editorial split */}
         <section className="section-pad container-site">
@@ -166,7 +148,7 @@ export default async function HomePage() {
                   <h3 className="font-serif text-display-sm text-foreground group-hover:text-accent transition-colors duration-300">
                     {service.name}
                   </h3>
-                  <p className="font-sans text-body-sm text-muted mt-1">{service.headline}</p>
+                  <p className="font-sans text-body-md text-muted mt-1">{service.headline}</p>
                 </Link>
               </FadeUp>
             ))}
@@ -186,7 +168,7 @@ export default async function HomePage() {
         </ParallaxImage>
 
         {/* Featured projects */}
-        <section className="section-pad container-site">
+        <section className="section-pad-tight container-site">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <SectionHeading
               label="Selected work"
@@ -218,7 +200,7 @@ export default async function HomePage() {
         </section>
 
         {/* Client types */}
-        <section className="section-pad bg-surface">
+        <section className="section-pad-tight bg-surface">
           <div className="container-site">
             <FadeUp>
               <p className="label-text mb-8 text-center">Who we work with</p>
@@ -235,45 +217,47 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Training callout */}
-        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-          <ParallaxImage className="absolute inset-0" speed={0.1}>
-            <Image
-              src={images.training.hero}
-              alt="Training and capacity building"
-              fill
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-foreground/75" />
-          </ParallaxImage>
-          <div className="relative z-10 container-site text-center py-20">
-            <FadeUp>
-              <p className="font-sans text-label-md uppercase tracking-widest text-background/60 mb-4">
-                Training and Capacity Building
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.1}>
-              <h2 className="font-serif text-display-lg text-background mb-6 text-balance">
-                Build skills that stay in the sector.
-              </h2>
-            </FadeUp>
-            <FadeUp delay={0.2}>
-              <p className="font-sans text-body-lg text-background/70 max-w-xl mx-auto mb-8">
-                Short courses, workshops, and professional development programmes for engineers,
-                architects, and project managers.
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.3}>
-              <Link
-                href="/training"
-                className="btn-primary bg-background text-foreground hover:bg-accent hover:text-background"
-              >
-                View Programmes
-              </Link>
-            </FadeUp>
-          </div>
-        </section>
+        {/* Training callout — dark colour scene */}
+        <ScrollColourScene bgColor={tokens.colors.foreground} fgColor={tokens.colors.background}>
+          <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+            <ParallaxImage className="absolute inset-0" speed={0.1}>
+              <Image
+                src={images.training.hero}
+                alt="Training and capacity building"
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-foreground/75" />
+            </ParallaxImage>
+            <div className="relative z-10 container-site text-center py-20">
+              <FadeUp>
+                <p className="font-sans text-label-md uppercase tracking-widest text-background/60 mb-4">
+                  Training and Capacity Building
+                </p>
+              </FadeUp>
+              <FadeUp delay={0.1}>
+                <h2 className="font-serif text-display-lg text-background mb-6 text-balance">
+                  Build skills that stay in the sector.
+                </h2>
+              </FadeUp>
+              <FadeUp delay={0.2}>
+                <p className="font-sans text-body-lg text-background/70 max-w-xl mx-auto mb-8">
+                  Short courses, workshops, and professional development programmes for engineers,
+                  architects, and project managers.
+                </p>
+              </FadeUp>
+              <FadeUp delay={0.3}>
+                <Link
+                  href="/training"
+                  className="btn-primary bg-background text-foreground hover:bg-accent hover:text-background"
+                >
+                  View Programmes
+                </Link>
+              </FadeUp>
+            </div>
+          </section>
+        </ScrollColourScene>
 
         {/* Contact strip with map */}
         <section className="section-pad container-site">
@@ -287,7 +271,6 @@ export default async function HomePage() {
               <EnquiryForm className="mt-10" />
             </div>
             <div className="flex flex-col gap-6">
-              {/* Map embed */}
               <div className="aspect-square md:aspect-[4/3] w-full overflow-hidden border border-border">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8177!2d36.8166!3d-1.2833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10cf61c40c5b%3A0x1e1a9a2b2c3d4e5f!2sHughes+Building%2C+Kenyatta+Avenue%2C+Nairobi!5e0!3m2!1sen!2ske!4v1234567890"
@@ -299,7 +282,6 @@ export default async function HomePage() {
                   title="Insight AfriResearch office location"
                 />
               </div>
-              {/* Office details */}
               <div className="space-y-4">
                 <div>
                   <p className="label-text mb-1">Address</p>

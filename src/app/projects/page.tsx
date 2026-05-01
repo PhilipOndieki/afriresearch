@@ -4,9 +4,8 @@ import { ProjectGrid } from '@/components/organisms/ProjectGrid';
 import { SectionHeading } from '@/components/molecules/SectionHeading';
 import { FadeUp } from '@/components/animations/FadeUp';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
 import { images } from '@/config/images';
-import type { ProjectWithRelations } from '@/types/project';
+import { getPublishedProjects, categories } from '@/config/projects';
 
 export const metadata = buildMetadata({
   title: 'Projects',
@@ -15,30 +14,8 @@ export const metadata = buildMetadata({
   canonical: '/projects',
 });
 
-export const dynamic = 'force-dynamic';
-
-async function getData() {
-  const [projects, categories] = await Promise.all([
-    db.project.findMany({
-      where: { status: 'PUBLISHED' },
-      include: { category: true, images: { orderBy: { sortOrder: 'asc' } } },
-      orderBy: { year: 'desc' },
-    }),
-    db.projectCategory.findMany({ orderBy: { name: 'asc' } }),
-  ]);
-
-  const typed: ProjectWithRelations[] = projects.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-    status: p.status as 'PUBLISHED' | 'DRAFT' | 'ARCHIVED',
-  }));
-
-  return { projects: typed, categories };
-}
-
-export default async function ProjectsPage() {
-  const { projects, categories } = await getData();
+export default function ProjectsPage() {
+  const projects = getPublishedProjects();
 
   return (
     <PageShell>

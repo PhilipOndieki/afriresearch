@@ -81,18 +81,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-background/10 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* Bottom strip — copyright only */}
+        <div className="border-t border-background/10 pt-8">
           <p className="font-sans text-body-sm text-background/40">
             &copy; {year} {siteConfig.name}. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <span className="font-sans text-label-sm text-background/30">
-              Reg. {siteConfig.credentials.registrationNumber}
-            </span>
-            <span className="font-sans text-label-sm text-background/30">
-              NCA {siteConfig.credentials.ncaRegistration}
-            </span>
-          </div>
         </div>
       </div>
     </footer>

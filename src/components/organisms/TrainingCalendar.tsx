@@ -36,13 +36,14 @@ export function TrainingCalendar({ sessions }: TrainingCalendarProps) {
               <h3 className="font-serif text-display-sm text-foreground mb-1">
                 {session.program?.title}
               </h3>
-              <p className="font-sans text-body-sm text-muted">
+              {/* Bumped from text-body-sm */}
+              <p className="font-sans text-body-md text-muted">
                 {session.venue ?? session.location} &middot; {session.program?.duration}
               </p>
             </div>
             <div className="flex flex-col items-start md:items-end gap-3">
               <Badge variant={statusBadge[session.status]}>{session.status}</Badge>
-              <p className="font-sans text-body-sm text-foreground font-medium">
+              <p className="font-sans text-body-md text-foreground font-medium">
                 KES {Number(session.fee).toLocaleString()}
               </p>
               {session.status === 'OPEN' && (

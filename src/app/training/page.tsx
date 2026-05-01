@@ -6,9 +6,8 @@ import { FadeUp } from '@/components/animations/FadeUp';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { ParallaxImage } from '@/components/animations/ParallaxImage';
 import { buildMetadata } from '@/lib/seo';
-import { db } from '@/lib/db';
 import { images } from '@/config/images';
-import type { TrainingProgram, TrainingSession } from '@/types/training';
+import { getActivePrograms, getUpcomingSessions } from '@/config/training';
 import { RegistrationForm } from './RegistrationForm';
 
 export const metadata = buildMetadata({
@@ -18,54 +17,9 @@ export const metadata = buildMetadata({
   canonical: '/training',
 });
 
-export const dynamic = 'force-dynamic';
-
-async function getData() {
-  const [programs, sessions] = await Promise.all([
-    db.trainingProgram.findMany({
-      where: { isActive: true },
-      orderBy: { title: 'asc' },
-    }),
-    db.trainingSession.findMany({
-      where: {
-        status: { in: ['OPEN', 'FULL'] },
-        startDate: { gte: new Date() },
-      },
-      include: {
-        program: true,
-        _count: { select: { registrations: true } },
-      },
-      orderBy: { startDate: 'asc' },
-    }),
-  ]);
-
-  const typedPrograms: TrainingProgram[] = programs.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-  }));
-
-  const typedSessions: TrainingSession[] = sessions.map((s) => ({
-    ...s,
-    startDate: s.startDate.toISOString(),
-    endDate: s.endDate.toISOString(),
-    createdAt: s.createdAt.toISOString(),
-    fee: Number(s.fee),
-    status: s.status as 'OPEN' | 'FULL' | 'CANCELLED' | 'COMPLETED',
-    program: s.program
-      ? {
-          ...s.program,
-          createdAt: s.program.createdAt.toISOString(),
-          updatedAt: s.program.updatedAt.toISOString(),
-        }
-      : undefined,
-  }));
-
-  return { programs: typedPrograms, sessions: typedSessions };
-}
-
-export default async function TrainingPage() {
-  const { programs, sessions } = await getData();
+export default function TrainingPage() {
+  const programs = getActivePrograms();
+  const sessions = getUpcomingSessions();
 
   return (
     <PageShell>
@@ -113,7 +67,7 @@ export default async function TrainingPage() {
       </section>
 
       {/* Programmes */}
-      <section className="section-pad bg-surface">
+      <section className="section-pad-tight bg-surface">
         <div className="container-site">
           <SectionHeading
             label="Programmes"
@@ -138,12 +92,12 @@ export default async function TrainingPage() {
                     <h3 className="font-serif text-display-sm text-foreground mb-3">
                       {program.title}
                     </h3>
-                    <p className="font-sans text-body-sm text-muted mb-4 line-clamp-3">
+                    <p className="font-sans text-body-md text-muted mb-4 line-clamp-3">
                       {program.description}
                     </p>
                     <div className="border-t border-border pt-4">
                       <p className="label-text mb-1">Target group</p>
-                      <p className="font-sans text-body-sm text-foreground">
+                      <p className="font-sans text-body-md text-foreground">
                         {program.targetGroup}
                       </p>
                     </div>

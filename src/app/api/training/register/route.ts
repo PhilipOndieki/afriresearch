@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
 import { trainingRegistrationSchema } from '@/schemas/training.schema';
-import { sendTrainingRegistrationConfirmation } from '@/lib/email';
+import {
+  sendTrainingRegistrationConfirmation,
+  sendTrainingRegistrationNotification,
+} from '@/lib/email';
+import { getSessionById } from '@/config/training';
 import type { ApiError } from '@/types/api';
 
 export async function POST(req: NextRequest) {
@@ -14,11 +17,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const session = await db.trainingSession.findUnique({
-    where: { id: result.data.sessionId },
-    include: { program: true, _count: { select: { registrations: true } } },
-  });
-
+  const session = getSessionById(result.data.sessionId);
   if (!session) {
     return NextResponse.json<ApiError>({ error: 'Session not found' }, { status: 404 });
   }
@@ -28,23 +27,21 @@ export async function POST(req: NextRequest) {
       { status: 409 },
     );
   }
-  if (session._count.registrations >= session.capacity) {
-    await db.trainingSession.update({ where: { id: session.id }, data: { status: 'FULL' } });
-    return NextResponse.json<ApiError>({ error: 'Session is fully booked' }, { status: 409 });
-  }
 
-  const registration = await db.trainingRegistration.create({ data: result.data });
-
+  // Fire-and-forget — the email is the record
   if (session.program) {
-    sendTrainingRegistrationConfirmation(
-      result.data.email,
-      result.data.name,
-      session.program.title,
-      session.startDate,
-      session.venue ?? session.location,
-      Number(session.fee),
-    ).catch(console.error);
+    Promise.all([
+      sendTrainingRegistrationConfirmation(
+        result.data.email,
+        result.data.name,
+        session.program.title,
+        new Date(session.startDate),
+        session.venue ?? session.location,
+        session.fee,
+      ).catch(console.error),
+      sendTrainingRegistrationNotification(result.data, session).catch(console.error),
+    ]);
   }
 
-  return NextResponse.json({ data: registration }, { status: 201 });
+  return NextResponse.json({ data: { success: true } }, { status: 201 });
 }

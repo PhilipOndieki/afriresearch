@@ -176,29 +176,6 @@ export default function AboutPage() {
           </div>
         </section>
       </ScrollColourScene>
-
-      {/* Credentials */}
-      <section className="section-pad container-site">
-        <SectionHeading
-          label="Credentials"
-          title="Registered. Certified. Accountable."
-          className="mb-10"
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl">
-          {[
-            { label: 'Business Registration', value: siteConfig.credentials.registrationNumber },
-            { label: 'NCA Registration', value: siteConfig.credentials.ncaRegistration },
-            { label: 'AAK Membership', value: siteConfig.credentials.aakMembership },
-          ].map((cred, i) => (
-            <FadeUp key={cred.label} delay={i * 0.1}>
-              <div className="border border-border p-6">
-                <p className="label-text mb-2">{cred.label}</p>
-                <p className="font-mono text-body-md text-foreground">{cred.value}</p>
-              </div>
-            </FadeUp>
-          ))}
-        </div>
-      </section>
     </PageShell>
   );
 }

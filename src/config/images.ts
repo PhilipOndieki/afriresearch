@@ -50,7 +50,7 @@ export const images = {
     siteTools: q('/photo-1504307651254-35680f356dfd'),
   },
   services: {
-    architecture: q('/photo-1487958449943-2429e8be8625', 1920),
+    architecture: '/images/services/architecture.webp',
     engineering: q('/photo-1541888946425-d81bb19240f5', 1920),
     research: q('/photo-1454165804606-c3d57bc86b40', 1920),
     training: q('/photo-1524178232363-1fb2b075b655', 1920),

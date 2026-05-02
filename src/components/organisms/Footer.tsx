@@ -11,11 +11,6 @@ export function Footer() {
       <div className="container-site">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <Logo variant="light" className="mb-6" />
-            <p className="font-sans text-body-md text-background/70 max-w-sm mb-6">
-              Multidisciplinary firm delivering architecture, engineering, research, training, and
-              project supervision across East Africa.
-            </p>
             <address className="font-sans text-body-sm text-background/60 not-italic space-y-1">
               <p>{siteConfig.contact.address}</p>
               <p>

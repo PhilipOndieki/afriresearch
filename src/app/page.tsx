@@ -69,7 +69,7 @@ export default function HomePage() {
               <div className="relative">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
-                    src={images.about.building}
+                    src="/images/nairobibuilding.webp"
                     alt="Architectural design by Insight AfriResearch"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -155,20 +155,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Full bleed divider image */}
-        <ParallaxImage className="h-[50vh] md:h-[65vh]" speed={0.2}>
-          <Image
-            src={images.africa.nairobiSkyline}
-            alt="Nairobi skyline"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-foreground/30" />
-        </ParallaxImage>
-
         {/* Featured projects */}
-        <section className="section-pad-tight container-site">
+        <section className="pt-0 pb-12 md:pb-20 container-site">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <SectionHeading
               label="Selected work"

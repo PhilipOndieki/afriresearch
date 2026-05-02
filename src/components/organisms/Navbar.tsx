@@ -155,10 +155,7 @@ export function Navbar() {
       {/* ── Fixed header bar ─────────────────────────────────────────── */}
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-40 transition-all duration-400',
-          scrolled || navOpen
-            ? 'bg-background/95 backdrop-blur-sm border-b border-border'
-            : 'bg-transparent',
+          'fixed top-0 left-0 right-0 z-40 transition-all duration-400','bg-transparent',
         )}
       >
         <div className="container-site">
@@ -169,6 +166,30 @@ export function Navbar() {
             <Logo variant={lightNav ? 'light' : 'dark'} />
 
             <div className="flex items-center gap-2 sm:gap-3">
+
+              {/* Hamburger — all breakpoints */}
+              <button
+                onClick={toggleNav}
+                className={cn(
+                  'flex flex-col justify-center gap-[13px] w-12 h-12 items-center',
+                  lightNav && !navOpen ? 'text-background' : 'text-foreground',
+                )}
+                aria-label={navOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={navOpen}
+                aria-haspopup="dialog"
+              >
+                <span className={cn(
+                    'w-[40px] h-px bg-current transition-all duration-300 origin-center',
+                    navOpen && 'rotate-45 translate-y-[4px]'
+                   )} 
+                />
+                <span className={cn(
+                    'w-[40px] h-px bg-current transition-all duration-300 origin-center', 
+                    navOpen && '-rotate-45 -translate-y-[4px]'
+                  )} 
+                />
+              </button>
+
               {/* Contact us — always visible */}
               <Link
                 href="/contact"
@@ -182,36 +203,7 @@ export function Navbar() {
                 Contact us
               </Link>
 
-              {/* Hamburger — all breakpoints */}
-              <button
-                onClick={toggleNav}
-                className={cn(
-                  'flex flex-col justify-center gap-[5px] w-10 h-10 items-center',
-                  lightNav && !navOpen ? 'text-background' : 'text-foreground',
-                )}
-                aria-label={navOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                aria-expanded={navOpen}
-                aria-haspopup="dialog"
-              >
-                <span
-                  className={cn(
-                    'w-[22px] h-px bg-current transition-all duration-300 origin-center',
-                    navOpen && 'rotate-45 translate-y-[8px]',
-                  )}
-                />
-                <span
-                  className={cn(
-                    'w-[22px] h-px bg-current transition-all duration-300',
-                    navOpen && 'opacity-0 scale-x-0',
-                  )}
-                />
-                <span
-                  className={cn(
-                    'w-[15px] h-px bg-current transition-all duration-300 origin-center',
-                    navOpen ? '-rotate-45 -translate-y-[8px] w-[22px]' : 'self-end mr-[0px]',
-                  )}
-                />
-              </button>
+
             </div>
           </nav>
         </div>

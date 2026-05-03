@@ -110,9 +110,10 @@ export default function HomePage() {
 
         {/* Services preview */}
         <section className="section-pad container-site">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+          <div className="flex flex-col items-center gap-6 mb-12">
             <SectionHeading
               label="What we do"
+              align="center"
               title="Five disciplines. One firm."
               className="mb-0"
             />
@@ -156,13 +157,11 @@ export default function HomePage() {
         </section>
 
         {/* Featured projects */}
-        <section className="pt-0 pb-12 md:pb-20 container-site">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-            <SectionHeading
-              label="Selected work"
-              title="Projects we are proud of."
-              className="mb-0"
-            />
+        <section className="pt-0 pb-12 md:pb-20  container-site">
+          <div className="flex flex-col items-center gap-6 mb-12">
+            <FadeUp>
+              <p className="label-text mb-10 text-center">Selected work</p>
+            </FadeUp>
             <FadeUp>
               <Link href="/projects" className="btn-text shrink-0">
                 All Projects
@@ -188,23 +187,24 @@ export default function HomePage() {
         </section>
 
         {/* Client types */}
-        <section className="section-pad-tight bg-surface">
+        <section className="section-pad-tight bg-surface overflow-hidden">
           <div className="container-site">
             <FadeUp>
-              <p className="label-text mb-8 text-center">Who we work with</p>
+              <p className="label-text mb-10 text-center">Who we work with</p>
             </FadeUp>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex items-center gap-0 divide-x divide-border">
               {clientTypes.map((type, i) => (
-                <FadeUp key={type} delay={i * 0.05}>
-                  <span className="font-sans text-body-md text-foreground border border-border px-6 py-3">
-                    {type}
-                  </span>
+                <FadeUp key={type} delay={i * 0.06}>
+                  <div className="flex flex-col items-center px-8 py-4 group cursor-default">
+                    <span className="font-serif text-display-sm text-foreground group-hover:text-accent transition-colors duration-300 text-center">
+                      {type}
+                    </span>
+                  </div>
                 </FadeUp>
               ))}
             </div>
           </div>
         </section>
-
         {/* Training callout — dark colour scene */}
         <ScrollColourScene bgColor={tokens.colors.foreground} fgColor={tokens.colors.background}>
           <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
@@ -246,70 +246,6 @@ export default function HomePage() {
             </div>
           </section>
         </ScrollColourScene>
-
-        {/* Contact strip with map */}
-        <section className="section-pad container-site">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div>
-              <SectionHeading
-                label="Get in touch"
-                title="Tell us about your project."
-                subtitle="We respond to every enquiry within two business days."
-              />
-              <EnquiryForm className="mt-10" />
-            </div>
-            <div className="flex flex-col gap-6">
-              <div className="aspect-square md:aspect-[4/3] w-full overflow-hidden border border-border">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8177!2d36.8166!3d-1.2833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10cf61c40c5b%3A0x1e1a9a2b2c3d4e5f!2sHughes+Building%2C+Kenyatta+Avenue%2C+Nairobi!5e0!3m2!1sen!2ske!4v1234567890"
-                  width="100%"
-                  height="100%"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="grayscale"
-                  title="Insight AfriResearch office location"
-                />
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <p className="label-text mb-1">Address</p>
-                  <p className="font-sans text-body-md text-foreground">
-                    {siteConfig.contact.address}
-                  </p>
-                </div>
-                <div className="flex gap-8">
-                  <div>
-                    <p className="label-text mb-1">Phone</p>
-                    <a
-                      href={`tel:${siteConfig.contact.phone}`}
-                      className="font-sans text-body-md text-foreground hover:text-accent transition-colors"
-                    >
-                      {siteConfig.contact.phone}
-                    </a>
-                  </div>
-                  <div>
-                    <p className="label-text mb-1">Mobile</p>
-                    <a
-                      href={`tel:${siteConfig.contact.mobile}`}
-                      className="font-sans text-body-md text-foreground hover:text-accent transition-colors"
-                    >
-                      {siteConfig.contact.mobile}
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <p className="label-text mb-1">Email</p>
-                  <a
-                    href={`mailto:${siteConfig.contact.email}`}
-                    className="font-sans text-body-md text-foreground hover:text-accent transition-colors"
-                  >
-                    {siteConfig.contact.email}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </>

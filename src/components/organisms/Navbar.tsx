@@ -264,7 +264,7 @@ export function Navbar() {
                     <span className="font-sans text-label-sm text-background/30 tracking-widest w-6 shrink-0 group-hover:text-background/50 transition-colors">
                       0{i + 1}
                     </span>
-                    <span className="text-[clamp(2.5rem,6vw,5rem)] leading-[1.05] tracking-[-0.02em]">
+                    <span className="text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]">
                       {item.label}
                     </span>
                   </Link>

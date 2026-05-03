@@ -21,6 +21,7 @@ const config: Config = {
           foreground: '#9A9A9A',
         },
         border: '#E5E5E0',
+        slatesky: '#5B8FA8',
         surface: {
           DEFAULT: '#F0F0EC',
           elevated: '#FFFFFF',

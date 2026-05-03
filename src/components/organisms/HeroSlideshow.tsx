@@ -242,15 +242,6 @@ export function HeroSlideshow() {
           />
         ))}
       </div>
-
-      {/* ── Scroll hint ───────────────────────────────── */}
-      <div
-        className="absolute bottom-8 right-0 container-site z-20 flex flex-col items-end gap-2 text-background/35 pointer-events-none"
-        aria-hidden="true"
-      >
-        <span className="font-sans text-label-sm uppercase tracking-widest">Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-background/35 to-transparent" />
-      </div>
     </section>
   );
 }

@@ -27,6 +27,7 @@ export function Navbar() {
   const { navOpen, toggleNav, setNavOpen } = useUiStore();
   const [scrolled, setScrolled] = useState(false);
   const [activePreview, setActivePreview] = useState<string | null>(null);
+  const [logoVisible, setLogoVisible] = useState(true);
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -67,6 +68,20 @@ export function Navbar() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen, setNavOpen]);
+
+  // Hide navbar logo when footer is visible
+  useEffect(() => {
+    const footer = document.getElementById('site-footer');
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setLogoVisible(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
 
   // GSAP: overlay slide + link stagger
   useEffect(() => {
@@ -163,8 +178,13 @@ export function Navbar() {
             className="flex items-center justify-between h-16 md:h-20"
             aria-label="Main navigation"
           >
-            <Logo variant={lightNav ? 'light' : 'dark'} />
-
+            <Logo
+              variant={lightNav ? 'light' : 'dark'}
+              className={cn(
+                'transition-opacity duration-500',
+                logoVisible ? 'opacity-100' : 'opacity-0 pointer-events-none',
+              )}
+            />
             <div className="flex items-center gap-2 sm:gap-3">
 
               {/* Hamburger — all breakpoints */}
@@ -242,7 +262,6 @@ export function Navbar() {
               </span>
             </button>
           </div>
-
           {/* Nav links */}
           <nav aria-label="Site navigation">
             <ul className="space-y-0">
@@ -254,16 +273,16 @@ export function Navbar() {
                     }}
                     href={item.href}
                     style={{ opacity: 0 }}
-                    className="group flex items-baseline gap-4 py-2 md:py-3 font-serif leading-none text-background transition-colors duration-200 hover:text-white"
+                    className="group flex items-center py-2 md:py-3 font-serif leading-none text-background transition-colors duration-200 hover:text-white"
                     onMouseEnter={() => handleLinkEnter(item.href)}
                     onMouseLeave={handleLinkLeave}
                     onFocus={() => handleLinkEnter(item.href)}
                     onBlur={handleLinkLeave}
                     tabIndex={navOpen ? 0 : -1}
                   >
-                    <span className="font-sans text-label-sm text-background/30 tracking-widest w-6 shrink-0 group-hover:text-background/50 transition-colors">
-                      0{i + 1}
-                    </span>
+                    {/* Dash — zero width by default, expands on hover */}
+                    <span className="w-0 group-hover:w-4 h-px bg-background opacity-0 group-hover:opacity-100 transition-all duration-300 ease-expo-out shrink-0 group-hover:mr-3" />
+                    {/* Text — flush by default, shifts right on hover */}
                     <span className="text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]">
                       {item.label}
                     </span>
@@ -272,7 +291,6 @@ export function Navbar() {
               ))}
             </ul>
           </nav>
-
           {/* Bottom: tagline */}
           <p className="font-sans text-label-sm text-background/25 uppercase tracking-widest">
             Insight AfriResearch Ltd — Nairobi, Kenya

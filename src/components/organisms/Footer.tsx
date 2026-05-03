@@ -54,7 +54,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="bg-foreground text-background">
+    <footer id="site-footer" className="bg-foreground text-background">
       {/* Main footer body */}
       <div className="flex overflow-hidden">
         {/* Left column */}
@@ -78,13 +78,13 @@ export function Footer() {
                   <Link
                     ref={(el) => { linkRefs.current[i] = el; }}
                     href={item.href}
-                    className="group flex items-baseline gap-4 py-2 font-serif text-background hover:text-white transition-colors duration-200"
+                    className="group flex items-center py-2 font-serif text-background hover:text-white transition-colors duration-200"
                     onMouseEnter={() => handleEnter(item.href)}
                     onMouseLeave={handleLeave}
                   >
-                    <span className="font-sans text-label-sm text-background/30 tracking-widest w-6 shrink-0 group-hover:text-background/50 transition-colors">
-                      0{i + 1}
-                    </span>
+                    {/* Dash — zero width by default, expands on hover */}
+                    <span className="w-0 group-hover:w-4 h-px bg-background opacity-0 group-hover:opacity-100 transition-all duration-300 ease-expo-out shrink-0 group-hover:mr-3" />
+                    {/* Text — flush by default, shifts right on hover */}
                     <span className="text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]">
                       {item.label}
                     </span>

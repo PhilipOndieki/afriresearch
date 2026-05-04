@@ -7,8 +7,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  lint-and-test:
-    name: Lint & Test
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,12 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Run tests
+      run: npm test -- --passWithNoTests
 
   build:
     name: Build
-    needs: lint-and-test
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -46,11 +48,12 @@ jobs:
     - name: Build Next.js app
       run: npm run build
       env:
-        NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+        NEXT_PUBLIC_SITE_URL: https://afriresearch.vercel.app
         NEXT_PUBLIC_SITE_NAME: "Insight AfriResearch Ltd"
-        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
-        ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        # TODO: add these secrets in GitHub → Settings → Secrets → Actions
+        RESEND_API_KEY: placeholder
+        RESEND_FROM_EMAIL: noreply@insightafriresearch.com
+        ADMIN_EMAIL: insightafri@gmail.com
 
     - name: Build stats
       run: |
@@ -72,6 +75,7 @@ jobs:
       run: npm install --global vercel@latest
 
     - name: Pull Vercel environment
+      # TODO: add VERCEL_TOKEN in GitHub → Settings → Secrets → Actions
       run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
     - name: Build on Vercel

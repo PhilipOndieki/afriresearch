@@ -11,7 +11,6 @@ import { projects } from '@/config/projects';
 import { useUiStore } from '@/store/uiStore';
 import { cn } from '@/utils/cn';
 
-// One representative image per nav destination, sourced only from existing config keys
 const NAV_PREVIEWS: Record<string, string> = {
   '/services': images.services.architecture,
   '/projects': projects[0]?.coverImage ?? images.projects.aljazeraResidency,
@@ -33,26 +32,22 @@ export function Navbar() {
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const gsapRef = useRef<GsapModule | null>(null);
 
-  // Pre-load GSAP so event handlers don't async-import on each call
   useEffect(() => {
     import('@/lib/gsap').then((mod) => {
       gsapRef.current = mod;
     });
   }, []);
 
-  // Scroll detection
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Route change: close nav
   useEffect(() => {
     setNavOpen(false);
   }, [pathname, setNavOpen]);
 
-  // Body scroll lock
   useEffect(() => {
     document.body.style.overflow = navOpen ? 'hidden' : '';
     return () => {
@@ -60,7 +55,6 @@ export function Navbar() {
     };
   }, [navOpen]);
 
-  // ESC to close
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && navOpen) setNavOpen(false);
@@ -69,21 +63,17 @@ export function Navbar() {
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen, setNavOpen]);
 
-  // Hide navbar logo when footer is visible
   useEffect(() => {
     const footer = document.getElementById('site-footer');
     if (!footer) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => setLogoVisible(!entry.isIntersecting),
-      { threshold: 0 }
+      { threshold: 0 },
     );
-
     observer.observe(footer);
     return () => observer.disconnect();
   }, []);
 
-  // GSAP: overlay slide + link stagger
   useEffect(() => {
     const overlay = overlayRef.current;
     const links = navLinksRef.current.filter((l): l is HTMLAnchorElement => l !== null);
@@ -107,7 +97,6 @@ export function Navbar() {
         '-=0.15',
       );
     } else {
-      // Reset links immediately, then slide overlay back down
       gsap.set(links, { autoAlpha: 0, y: 32 });
       setActivePreview(null);
       if (prefersReduced) {
@@ -118,7 +107,6 @@ export function Navbar() {
     }
   }, [navOpen]);
 
-  // Hover: dim siblings via GSAP, reveal preview via state
   const handleLinkEnter = useCallback((href: string) => {
     setActivePreview(href);
     const gsap = gsapRef.current?.gsap;
@@ -140,7 +128,6 @@ export function Navbar() {
     });
   }, []);
 
-  // Focus trap inside overlay
   const handleOverlayKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Tab') return;
     const focusable = overlayRef.current?.querySelectorAll<HTMLElement>(
@@ -168,16 +155,13 @@ export function Navbar() {
   return (
     <>
       {/* ── Fixed header bar ─────────────────────────────────────────── */}
-      <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-40 transition-all duration-400','bg-transparent',
-        )}
-      >
+      <header className="fixed top-0 left-0 right-0 z-40 transition-all duration-400 bg-transparent">
         <div className="container-site">
           <nav
-            className="flex items-center justify-between h-16 md:h-20"
+            className="flex items-center justify-between h-14 sm:h-16 md:h-20"
             aria-label="Main navigation"
           >
+            {/* Logo */}
             <Logo
               variant={lightNav ? 'light' : 'dark'}
               className={cn(
@@ -185,36 +169,16 @@ export function Navbar() {
                 logoVisible ? 'opacity-100' : 'opacity-0 pointer-events-none',
               )}
             />
+
+            {/* Right side controls */}
             <div className="flex items-center gap-2 sm:gap-3">
 
-              {/* Hamburger — all breakpoints */}
-              <button
-                onClick={toggleNav}
-                className={cn(
-                  'flex flex-col justify-center gap-[13px] w-12 h-12 items-center',
-                  lightNav && !navOpen ? 'text-background' : 'text-foreground',
-                )}
-                aria-label={navOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                aria-expanded={navOpen}
-                aria-haspopup="dialog"
-              >
-                <span className={cn(
-                    'w-[40px] h-px bg-current transition-all duration-300 origin-center',
-                    navOpen && 'rotate-45 translate-y-[4px]'
-                   )} 
-                />
-                <span className={cn(
-                    'w-[40px] h-px bg-current transition-all duration-300 origin-center', 
-                    navOpen && '-rotate-45 -translate-y-[4px]'
-                  )} 
-                />
-              </button>
-
-              {/* Contact us — always visible */}
+              {/* Contact us — hidden on xs, visible from sm */}
               <Link
                 href="/contact"
                 className={cn(
-                  'font-sans text-label-sm uppercase tracking-widest px-4 py-2 border transition-all duration-400 text-nowrap',
+                  'hidden sm:inline-flex items-center justify-center font-sans text-label-sm uppercase tracking-widest border transition-all duration-400 text-nowrap',
+                  'px-3 py-1.5 md:px-4 md:py-2',
                   lightNav
                     ? 'border-background/50 text-background hover:bg-background hover:text-foreground'
                     : 'border-foreground/40 text-foreground hover:border-foreground hover:bg-foreground hover:text-background',
@@ -223,14 +187,42 @@ export function Navbar() {
                 Contact us
               </Link>
 
-
+              {/* Hamburger — all breakpoints */}
+              <button
+                onClick={toggleNav}
+                className={cn(
+                  'flex flex-col justify-center gap-[5px] sm:gap-[6px] w-10 h-10 sm:w-12 sm:h-12 items-center shrink-0',
+                  lightNav && !navOpen ? 'text-background' : 'text-foreground',
+                )}
+                aria-label={navOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={navOpen}
+                aria-haspopup="dialog"
+              >
+                {/* Top bar */}
+                <span
+                  className={cn(
+                    'block h-px bg-current transition-all duration-300 origin-center',
+                    navOpen
+                      ? 'w-[22px] sm:w-[28px] rotate-45 translate-y-[3px] sm:translate-y-[3.5px]'
+                      : 'w-[22px] sm:w-[32px]',
+                  )}
+                />
+                {/* Bottom bar — hides mid-animation then reappears as second X arm */}
+                <span
+                  className={cn(
+                    'block h-px bg-current transition-all duration-300 origin-center',
+                    navOpen
+                      ? 'w-[22px] sm:w-[28px] -rotate-45 -translate-y-[3px] sm:-translate-y-[3.5px]'
+                      : 'w-[28px] sm:w-[40px]',
+                  )}
+                />
+              </button>
             </div>
           </nav>
         </div>
       </header>
 
       {/* ── Full-viewport overlay ─────────────────────────────────────── */}
-      {/* Initial state: pushed off-screen below (translateY 100%). GSAP animates it up. */}
       <div
         ref={overlayRef}
         role="dialog"
@@ -242,16 +234,15 @@ export function Navbar() {
         onKeyDown={handleOverlayKeyDown}
       >
         {/* ── Left column: top bar + nav links ── */}
-        <div className="relative flex flex-col justify-between flex-1 px-6 pt-0 pb-12 sm:px-8 md:px-12 lg:px-16 xl:px-20 min-w-0">
-          {/* Top bar mirrors the header layout */}
-          <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="relative flex flex-col justify-between flex-1 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-0 pb-8 sm:pb-12 min-w-0 ">
+          {/* Top bar — matches header height */}
+          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20 shrink-0">
             <Logo variant="light" />
             <button
               onClick={() => setNavOpen(false)}
-              className="flex items-center justify-center w-10 h-10 text-background"
+              className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 text-background"
               aria-label="Close navigation menu"
             >
-              {/* × icon */}
               <span className="relative w-5 h-5 block">
                 <span className="absolute inset-0 flex items-center">
                   <span className="w-full h-px bg-current rotate-45" />
@@ -262,8 +253,9 @@ export function Navbar() {
               </span>
             </button>
           </div>
+
           {/* Nav links */}
-          <nav aria-label="Site navigation">
+          <nav aria-label="Site navigation" className="flex-1 flex flex-col justify-center py-6">
             <ul className="space-y-0">
               {navItems.map((item, i) => (
                 <li key={item.href}>
@@ -273,17 +265,16 @@ export function Navbar() {
                     }}
                     href={item.href}
                     style={{ opacity: 0 }}
-                    className="group flex items-center py-2 md:py-3 font-serif leading-none text-background transition-colors duration-200 hover:text-white"
+                    className="group flex items-center py-2 sm:py-2 md:py-3 font-serif leading-none text-background transition-colors duration-200 hover:text-white"
                     onMouseEnter={() => handleLinkEnter(item.href)}
                     onMouseLeave={handleLinkLeave}
                     onFocus={() => handleLinkEnter(item.href)}
                     onBlur={handleLinkLeave}
                     tabIndex={navOpen ? 0 : -1}
                   >
-                    {/* Dash — zero width by default, expands on hover */}
+                    {/* Expanding dash */}
                     <span className="w-0 group-hover:w-4 h-px bg-background opacity-0 group-hover:opacity-100 transition-all duration-300 ease-expo-out shrink-0 group-hover:mr-3" />
-                    {/* Text — flush by default, shifts right on hover */}
-                    <span className="text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]">
+                    <span className="text-[clamp(2rem,7vw,3.5rem)] sm:text-[clamp(2rem,5vw,2.75rem)] lg:text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]">
                       {item.label}
                     </span>
                   </Link>
@@ -291,10 +282,24 @@ export function Navbar() {
               ))}
             </ul>
           </nav>
-          {/* Bottom: tagline */}
-          <p className="font-sans text-label-sm text-background/25 uppercase tracking-widest">
-            Insight AfriResearch Ltd — Nairobi, Kenya
-          </p>
+
+          {/* Bottom: tagline + contact on mobile */}
+          <div className="shrink-0 space-y-4">
+            {/* Contact link — visible only on xs where header button is hidden */}
+            <Link
+              href="/contact"
+              className="sm:hidden inline-flex items-center gap-2 font-sans text-label-sm uppercase tracking-widest text-background/60 hover:text-background transition-colors"
+              tabIndex={navOpen ? 0 : -1}
+            >
+              Contact us
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <p className="font-sans text-label-sm text-background/25 uppercase tracking-widest">
+              Insight AfriResearch Ltd — Nairobi, Kenya
+            </p>
+          </div>
         </div>
 
         {/* ── Right column: preview image (desktop only) ── */}
@@ -302,14 +307,12 @@ export function Navbar() {
           className="hidden lg:block relative w-[42%] shrink-0 overflow-hidden"
           aria-hidden="true"
         >
-          {/* Default dark gradient when nothing is hovered */}
           <div
             className={cn(
               'absolute inset-0 bg-gradient-to-l from-zinc-900/60 to-transparent z-10 transition-opacity duration-400',
               activePreview ? 'opacity-0' : 'opacity-100',
             )}
           />
-
           {navItems.map((item) => (
             <div
               key={item.href}

@@ -2,7 +2,7 @@
 
 Production website for **Insight AfriResearch Ltd**, a Nairobi-based multidisciplinary firm providing Architectural Design, Engineering Services, Research and Consultancy, Training and Capacity Building, and Project Supervision across East Africa.
 
-The site serves as the firm's primary digital presence: showcasing projects, describing services, listing training programmes, and capturing client enquiries.
+The site serves as the firm's primary digital presence: showcasing projects, describing services, listing training programmes, and capturing client enquiries via email.
 
 ---
 
@@ -10,12 +10,10 @@ The site serves as the firm's primary digital presence: showcasing projects, des
 
 | Dependency | Role |
 |---|---|
-| Next.js 14 (App Router) | Framework — SSR, SSG, ISR, API routes |
-| MySQL + Prisma | Database ORM and migrations |
+| Next.js 14 (App Router) | Framework — SSR, SSG, API routes |
 | Tailwind CSS | Utility-first styling with custom design tokens |
 | GSAP + ScrollTrigger | Scroll-driven animations |
-| NextAuth.js | Admin authentication (magic link via email) |
-| Resend | Transactional email delivery |
+| Resend | Transactional email delivery for enquiries and training registrations |
 | Zustand | Client-side filter and UI state |
 | Zod | Schema validation on client and server |
 | Next/Font | Zero-layout-shift font loading |
@@ -31,24 +29,31 @@ src/
   components/
     atoms/        Primitive UI elements (Button, Input, Badge)
     molecules/    Composed units (ProjectCard, ServiceCard, FormField)
-    organisms/    Full page sections (Navbar, Footer, HeroTextureSlider)
-    templates/    Full page shells (PageShell, AdminShell)
+    organisms/    Full page sections (Navbar, Footer, HeroSlideshow)
+    templates/    Full page shells (PageShell)
     animations/   GSAP-powered wrappers (FadeUp, ParallaxImage, StaggerText)
-  config/         Static configuration (site, nav, images, tokens)
-  hooks/          Custom React hooks for data fetching
-  lib/            Server utilities (db, auth, email, seo)
+  config/         Static data and configuration (projects, services, team, training, images, tokens)
+  hooks/          Custom React hooks
+  lib/            Server utilities (email, seo, gsap)
   schemas/        Zod validation schemas
   store/          Zustand state stores
   types/          TypeScript type definitions
   utils/          Pure utility functions
-prisma/
-  schema.prisma   Database schema
-  seed.ts         Realistic seed data
-  migrations/     Auto-generated migration history
-tests/
-  unit/           Unit tests
-  integration/    API integration tests
 ```
+
+### Data model
+
+All site content — projects, services, team members, training programmes, and sessions — lives as **static TypeScript files** in `src/config/`. There is no database. To add or update content, edit the relevant config file directly.
+
+| File | Content |
+|---|---|
+| `src/config/projects.ts` | Project listings and categories |
+| `src/config/services.ts` | Service descriptions |
+| `src/config/team.ts` | Team member profiles |
+| `src/config/training.ts` | Training programmes and upcoming sessions |
+| `src/config/images.ts` | Centralised image URL registry |
+| `src/config/site.ts` | Site name, contact details, social links |
+| `src/config/tokens.ts` | Design tokens (colours, easing, duration) |
 
 ---
 
@@ -57,8 +62,7 @@ tests/
 ### Prerequisites
 
 - Node.js 18+
-- MySQL 8.0+ (local or Railway)
-- A Resend account for email
+- A Resend account for transactional email
 
 ### Install
 
@@ -74,18 +78,14 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your values. Required before the dev server starts:
+Edit `.env` with your values:
 
-- `DATABASE_URL` — MySQL connection string
-- `NEXTAUTH_SECRET` — random 32-byte string (`openssl rand -base64 32`)
-- `NEXTAUTH_URL` — `http://localhost:3000` for local dev
-- `RESEND_API_KEY` — from resend.com dashboard
-
-### Run Database
-
-```bash
-npm run db:migrate      # creates tables
-npm run db:seed         # seeds with sample data
+```env
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxx
+RESEND_FROM_EMAIL=noreply@insightafriresearch.com
+ADMIN_EMAIL=insightafri@gmail.com
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_NAME=Insight AfriResearch Ltd
 ```
 
 ### Start Dev Server
@@ -100,43 +100,26 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Environment Variables
 
-| Key | Description | Example |
+| Key | Description | Required |
 |---|---|---|
-| `DATABASE_URL` | MySQL connection string | `mysql://root:pw@localhost:3306/afriresearch` |
-| `NEXTAUTH_SECRET` | NextAuth signing secret | `openssl rand -base64 32` output |
-| `NEXTAUTH_URL` | Canonical URL for NextAuth | `https://insightafriresearch.com` |
-| `RESEND_API_KEY` | Resend API key | `re_xxxxxxxxxx` |
-| `RESEND_FROM_EMAIL` | Email sender address | `noreply@insightafriresearch.com` |
-| `ADMIN_EMAIL` | Where enquiry notifications go | `insightafri@gmail.com` |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob for image uploads | `vercel_blob_rw_xxxxxx` |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL for SEO | `https://insightafriresearch.com` |
-| `NEXT_PUBLIC_SITE_NAME` | Site name for metadata | `Insight AfriResearch Ltd` |
+| `RESEND_API_KEY` | Resend API key for sending emails | Yes (production) |
+| `RESEND_FROM_EMAIL` | Sender address for outgoing emails | Yes (production) |
+| `ADMIN_EMAIL` | Where enquiry and registration notifications are delivered | Yes (production) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for SEO and OG tags | Yes |
+| `NEXT_PUBLIC_SITE_NAME` | Site name for metadata | Optional |
+
+> **Note:** Email sending is skipped gracefully if `RESEND_API_KEY` is not set — the API routes still return success. This means the dev server works without any email config.
 
 ---
 
-## Database
+## API Routes
 
-### Prisma Workflow
+The site has two lightweight API routes for form submissions. Both fire emails and return immediately — there is no database persistence.
 
-```bash
-# Create a new migration after schema changes
-npm run db:migrate
-
-# Push schema changes without creating a migration (dev only)
-npm run db:push
-
-# Reset the database and re-run all migrations
-npm run db:reset
-
-# Seed with sample data
-npm run db:seed
-
-# Open Prisma Studio (visual database browser)
-npm run db:studio
-
-# Deploy migrations in production
-npm run db:migrate:deploy
-```
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/enquiries` | Submit a general enquiry — sends notification to admin and confirmation to sender |
+| `POST` | `/api/training/register` | Register for a training session — sends confirmation to registrant and notification to admin |
 
 ---
 
@@ -217,6 +200,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap';
 | `<ParallaxImage>` | Vertical parallax on a wrapped image |
 | `<StaggerText>` | Word-by-word or line-by-line text reveal |
 | `<ScrollReveal>` | Generic scroll-triggered class toggle |
+| `<ScrollColourScene>` | Transitions body background colour as section enters viewport |
 
 All primitives register `ScrollTrigger` and clean up on unmount.
 
@@ -226,38 +210,13 @@ All primitives register `ScrollTrigger` and clean up on unmount.
 
 All Unsplash URLs are centralised in `src/config/images.ts`. The `q()` helper appends width and quality parameters automatically.
 
-To swap to Cloudinary or Vercel Blob:
+To swap to a real CDN:
 
 1. Open `src/config/images.ts`
 2. Change `BASE` and update the `q()` helper signature
 3. No other file changes required
 
-All images render through `<Image>` from `next/image` with explicit `width`, `height`, and a `blurDataURL` placeholder.
-
----
-
-## API Reference
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/projects` | List projects (cursor pagination, filter by category/status) |
-| POST | `/api/projects` | Create project (admin only) |
-| GET | `/api/projects/[slug]` | Get single project with images |
-| PUT | `/api/projects/[slug]` | Update project (admin only) |
-| GET | `/api/enquiries` | List enquiries (admin only) |
-| POST | `/api/enquiries` | Submit public enquiry |
-| GET | `/api/training/programs` | List training programmes |
-| POST | `/api/training/programs` | Create programme (admin only) |
-| GET | `/api/training/sessions` | List upcoming sessions |
-| POST | `/api/training/sessions` | Create session (admin only) |
-| POST | `/api/training/register` | Register for a session |
-| GET | `/api/team` | List team members |
-| POST | `/api/team` | Create team member (admin only) |
-| GET | `/api/settings` | Get site settings |
-| PUT | `/api/settings` | Update site settings (admin only) |
-| POST | `/api/upload` | Upload image to Vercel Blob |
-
-All list endpoints accept `cursor` and `limit` query parameters. Responses follow `{ data, meta }` shape.
+All images render through `<Image>` from `next/image` with explicit `width`, `height`, and `sizes`.
 
 ---
 
@@ -266,33 +225,39 @@ All list endpoints accept `cursor` and `limit` query parameters. Responses follo
 ### Vercel (Application)
 
 1. Connect the GitHub repository to Vercel
-2. Set all environment variables from `.env.example` in Vercel project settings
+2. Set environment variables from `.env.example` in Vercel project settings
 3. Vercel auto-detects Next.js — no build configuration needed
-4. `main` branch deploys to production automatically
+4. `main` branch deploys to production automatically at **https://afriresearch.vercel.app/**
 
-### Railway (MySQL)
+### CI/CD (GitHub Actions)
 
-1. Create a new MySQL service on Railway
-2. Copy the `DATABASE_URL` from Railway and set it in Vercel env vars
-3. Run `npm run db:migrate:deploy` in a Railway deploy command or via CLI
+The workflow at `.github/workflows/frontend-ci-cd.yml` runs on every push and PR to `main`:
 
-### Database Backups
+1. **Lint & Test** — ESLint + Jest
+2. **Build** — `next build` with production env vars
+3. **Deploy** — Vercel CLI deployment (push to `main` only, skipped on PRs)
 
-Railway provides daily automated backups. For additional safety, schedule a weekly `mysqldump` via a Railway cron job and store exports in a separate S3 or Cloudflare R2 bucket.
+GitHub secrets required:
+
+| Secret | Value |
+|---|---|
+| `VERCEL_TOKEN` | From vercel.com → Account Settings → Tokens |
+| `NEXT_PUBLIC_SITE_URL` | `https://afriresearch.vercel.app` |
+| `RESEND_API_KEY` | From resend.com dashboard |
+| `RESEND_FROM_EMAIL` | `noreply@insightafriresearch.com` |
+| `ADMIN_EMAIL` | `insightafri@gmail.com` |
 
 ---
 
 ## Troubleshooting
 
-**`PrismaClientInitializationError`** — Check that `DATABASE_URL` is set and the MySQL server is running. Run `prisma db push` to verify connectivity.
-
 **Fonts not loading** — Ensure `--font-cormorant` and `--font-inter` CSS variables are set on `<html>` in `layout.tsx`. Clear `.next` cache and restart.
-
-**`NEXTAUTH_SECRET` error on login** — Set `NEXTAUTH_SECRET` in `.env`. It must be at least 32 characters.
 
 **Images not showing** — Confirm `images.unsplash.com` is in `remotePatterns` in `next.config.js`. Check network tab for 400/403 errors.
 
 **Hydration mismatch on animations** — All GSAP code must run inside `useEffect` or `useLayoutEffect`. Never read `window` or `document` at module level.
+
+**Enquiry emails not sending in development** — Expected. Set `RESEND_API_KEY` in `.env` if you need to test email locally, otherwise the API route silently skips sending and still returns a success response.
 
 ---
 
@@ -304,3 +269,4 @@ Railway provides daily automated backups. For additional safety, schedule a week
 - Client portal for project progress tracking
 - WhatsApp enquiry widget integration
 - PDF report generation for research deliverables
+- CMS integration (Sanity or Contentful) to allow non-technical content updates

@@ -42,12 +42,12 @@ export default function HomePage() {
     <>
       <Navbar />
       <main>
-        {/* Hero */}
+        {/* ── Hero ─────────────────────────────────────────────────── */}
         <HeroSlideshow />
 
-        {/* Who we are — editorial split */}
+        {/* ── Who we are ───────────────────────────────────────────── */}
         <section className="section-pad container-site">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
             <div>
               <SectionHeading
                 label="Who we are"
@@ -55,18 +55,19 @@ export default function HomePage() {
                 subtitle="We combine architectural rigour, engineering depth, and applied research to deliver buildings, infrastructure, and knowledge that last."
               />
               <FadeUp delay={0.3}>
-                <div className="flex gap-4 mt-8">
-                  <Link href="/about" className="btn-primary">
+                <div className="flex flex-col xs:flex-row sm:flex-row gap-3 sm:gap-4 mt-8">
+                  <Link href="/about" className="btn-primary text-center">
                     Our Story
                   </Link>
-                  <Link href="/services" className="btn-outline">
+                  <Link href="/services" className="btn-outline text-center">
                     Our Services
                   </Link>
                 </div>
               </FadeUp>
             </div>
+
             <ScrollReveal from="right">
-              <div className="relative">
+              <div className="relative mt-4 lg:mt-0">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
                     src="/images/nairobibuilding.webp"
@@ -76,7 +77,8 @@ export default function HomePage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-6 -left-6 bg-accent p-6 hidden md:block">
+                {/* Accent box: only show when grid is two-column (lg+) */}
+                <div className="absolute -bottom-6 -left-6 bg-accent p-4 sm:p-6 hidden lg:block">
                   <p className="font-serif text-display-sm text-background leading-tight">
                     Nairobi
                     <br />
@@ -88,10 +90,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats strip */}
-        <section className="bg-foreground py-14">
+        {/* ── Stats strip ──────────────────────────────────────────── */}
+        <section className="bg-foreground py-10 sm:py-14">
           <div className="container-site">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
               {stats.map((stat, i) => (
                 <FadeUp key={stat.label} delay={i * 0.1}>
                   <div className="text-center md:text-left">
@@ -108,17 +110,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Services preview */}
+        {/* ── Services preview ─────────────────────────────────────── */}
         <section className="section-pad container-site">
-          <div className="flex flex-col items-center gap-6 mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12">
             <SectionHeading
               label="What we do"
-              align="center"
               title="Five disciplines. One firm."
               className="mb-0"
             />
             <FadeUp>
-              <Link href="/services" className="btn-text shrink-0">
+              <Link href="/services" className="btn-text shrink-0 self-start sm:self-auto">
                 All Services
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path
@@ -132,7 +133,7 @@ export default function HomePage() {
               </Link>
             </FadeUp>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {services.slice(0, 3).map((service, i) => (
               <FadeUp key={service.slug} delay={i * 0.1}>
                 <Link href={`/services#${service.slug}`} className="group block">
@@ -156,11 +157,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured projects */}
-        <section className="pt-0 pb-12 md:pb-20  container-site">
-          <div className="flex flex-col items-center gap-6 mb-12">
+        {/* ── Featured projects ─────────────────────────────────────── */}
+        <section className="pt-0 pb-10 sm:pb-16 md:pb-20 container-site">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12">
             <FadeUp>
-              <p className="label-text mb-10 text-center">Selected work</p>
+              <p className="label-text">Selected work</p>
             </FadeUp>
             <FadeUp>
               <Link href="/projects" className="btn-text shrink-0">
@@ -177,7 +178,7 @@ export default function HomePage() {
               </Link>
             </FadeUp>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
             {featuredProjects.map((project, i) => (
               <FadeUp key={project.slug} delay={i * 0.1}>
                 <ProjectCard project={project} images={project.images?.map((img) => img.url)} />
@@ -186,13 +187,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Client types */}
+        {/* ── Client types ─────────────────────────────────────────── */}
+        {/*
+          Mobile: 2-column grid
+          sm: 3-column grid
+          lg+: horizontal scrolling flex strip with dividers
+        */}
         <section className="section-pad-tight bg-surface overflow-hidden">
           <div className="container-site">
             <FadeUp>
-              <p className="label-text mb-10 text-center">Who we work with</p>
+              <p className="label-text mb-8 sm:mb-10 text-center">Who we work with</p>
             </FadeUp>
-            <div className="flex items-center gap-0 divide-x divide-border">
+
+            {/* Mobile / tablet: grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 lg:hidden">
+              {clientTypes.map((type, i) => (
+                <FadeUp key={type} delay={i * 0.06}>
+                  <div className="border border-border px-4 py-3 sm:px-5 sm:py-4 text-center">
+                    <span className="font-serif text-body-lg sm:text-display-sm text-foreground leading-snug">
+                      {type}
+                    </span>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+
+            {/* Desktop: original horizontal flex with dividers */}
+            <div className="hidden lg:flex items-center gap-0 divide-x divide-border">
               {clientTypes.map((type, i) => (
                 <FadeUp key={type} delay={i * 0.06}>
                   <div className="flex flex-col items-center px-8 py-4 group cursor-default">
@@ -205,7 +226,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        {/* Training callout — dark colour scene */}
+
+        {/* ── Training callout ─────────────────────────────────────── */}
         <ScrollColourScene bgColor={tokens.colors.foreground} fgColor={tokens.colors.background}>
           <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
             <ParallaxImage className="absolute inset-0" speed={0.1}>
@@ -218,19 +240,19 @@ export default function HomePage() {
               />
               <div className="absolute inset-0 bg-foreground/75" />
             </ParallaxImage>
-            <div className="relative z-10 container-site text-center py-20">
+            <div className="relative z-10 container-site text-center py-14 sm:py-16 md:py-20">
               <FadeUp>
                 <p className="font-sans text-label-md uppercase tracking-widest text-background/60 mb-4">
                   Training and Capacity Building
                 </p>
               </FadeUp>
               <FadeUp delay={0.1}>
-                <h2 className="font-serif text-display-lg text-background mb-6 text-balance">
+                <h2 className="font-serif text-display-md sm:text-display-lg text-background mb-5 sm:mb-6 text-balance">
                   Build skills that stay in the sector.
                 </h2>
               </FadeUp>
               <FadeUp delay={0.2}>
-                <p className="font-sans text-body-lg text-background/70 max-w-xl mx-auto mb-8">
+                <p className="font-sans text-body-md sm:text-body-lg text-background/70 max-w-xl mx-auto mb-7 sm:mb-8">
                   Short courses, workshops, and professional development programmes for engineers,
                   architects, and project managers.
                 </p>

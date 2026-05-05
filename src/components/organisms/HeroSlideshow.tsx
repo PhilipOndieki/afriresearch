@@ -18,7 +18,7 @@ const SLIDES = [
     index: '02',
     label: 'Projects',
     href: '/projects',
-    src: images.projects.aljazeraResidency,
+    src: images.projects.takbirThika,
     srcNext: images.about.teamPhoto,
   },
   {

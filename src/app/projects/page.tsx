@@ -22,7 +22,7 @@ export default function ProjectsPage() {
       {/* Header */}
       <section className="relative h-[50vh] min-h-[380px] flex items-end overflow-hidden">
         <Image
-          src={images.hero.steel}
+          src={images.projects.projectbgbanner}
           alt="Projects — Insight AfriResearch"
           fill
           priority

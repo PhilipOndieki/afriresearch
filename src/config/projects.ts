@@ -1,4 +1,6 @@
 import type { ProjectCategory, ProjectWithRelations } from '@/types/project';
+import { images } from '@/config/images';
+
 
 export const categories: ProjectCategory[] = [
   {
@@ -27,13 +29,6 @@ export const categories: ProjectCategory[] = [
   },
 ];
 
-const STATIC_IMAGES = {
-  interior:
-    'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85&auto=format&fit=crop',
-  detail:
-    'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=85&auto=format&fit=crop',
-};
-
 export const projects: ProjectWithRelations[] = [
   {
     id: 1,
@@ -47,10 +42,8 @@ export const projects: ProjectWithRelations[] = [
     year: 2023,
     location: 'South C, Nairobi',
     client: 'Aljazera Properties Ltd',
-    coverImage:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=85&auto=format&fit=crop',
-    heroImage:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&q=85&auto=format&fit=crop',
+    coverImage: images.projects.aljazeraResidency,
+    heroImage: images.projects.aljazeraResidency,
     categoryId: 1,
     serviceId: 1,
     createdAt: '2023-01-01T00:00:00.000Z',
@@ -60,29 +53,11 @@ export const projects: ProjectWithRelations[] = [
       {
         id: 1,
         projectId: 1,
-        url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=85&auto=format&fit=crop',
+        url: images.projects.aljazeraResidency,
         alt: 'Aljazera Residency',
         caption: null,
         isCover: true,
         sortOrder: 0,
-      },
-      {
-        id: 2,
-        projectId: 1,
-        url: STATIC_IMAGES.interior,
-        alt: 'Aljazera Residency interior',
-        caption: null,
-        isCover: false,
-        sortOrder: 1,
-      },
-      {
-        id: 3,
-        projectId: 1,
-        url: STATIC_IMAGES.detail,
-        alt: 'Aljazera Residency detail',
-        caption: null,
-        isCover: false,
-        sortOrder: 2,
       },
     ],
   },
@@ -98,10 +73,8 @@ export const projects: ProjectWithRelations[] = [
     year: 2024,
     location: 'Mandera Town, Mandera County',
     client: 'Mandera County Government',
-    coverImage:
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=85&auto=format&fit=crop',
-    heroImage:
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=85&auto=format&fit=crop',
+    coverImage: images.projects.speakersResidence,
+    heroImage: images.projects.speakersResidence,
     categoryId: 4,
     serviceId: 1,
     createdAt: '2024-01-01T00:00:00.000Z',
@@ -111,29 +84,11 @@ export const projects: ProjectWithRelations[] = [
       {
         id: 4,
         projectId: 2,
-        url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=85&auto=format&fit=crop',
+        url: images.projects.speakersResidence,
         alt: "Speaker's Residence",
         caption: null,
         isCover: true,
         sortOrder: 0,
-      },
-      {
-        id: 5,
-        projectId: 2,
-        url: STATIC_IMAGES.interior,
-        alt: "Speaker's Residence interior",
-        caption: null,
-        isCover: false,
-        sortOrder: 1,
-      },
-      {
-        id: 6,
-        projectId: 2,
-        url: STATIC_IMAGES.detail,
-        alt: "Speaker's Residence detail",
-        caption: null,
-        isCover: false,
-        sortOrder: 2,
       },
     ],
   },
@@ -149,10 +104,8 @@ export const projects: ProjectWithRelations[] = [
     year: 2025,
     location: 'Thika Road, Kiambu County',
     client: 'Takbir Investments Ltd',
-    coverImage:
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85&auto=format&fit=crop',
-    heroImage:
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=85&auto=format&fit=crop',
+    coverImage: images.projects.takbirThika,
+    heroImage: images.projects.takbirThika,
     categoryId: 2,
     serviceId: 1,
     createdAt: '2025-01-01T00:00:00.000Z',
@@ -162,29 +115,11 @@ export const projects: ProjectWithRelations[] = [
       {
         id: 7,
         projectId: 3,
-        url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85&auto=format&fit=crop',
+        url: images.projects.takbirThika,
         alt: 'Takbir Service Station Thika',
         caption: null,
         isCover: true,
         sortOrder: 0,
-      },
-      {
-        id: 8,
-        projectId: 3,
-        url: STATIC_IMAGES.interior,
-        alt: 'Takbir Service Station interior',
-        caption: null,
-        isCover: false,
-        sortOrder: 1,
-      },
-      {
-        id: 9,
-        projectId: 3,
-        url: STATIC_IMAGES.detail,
-        alt: 'Takbir Service Station detail',
-        caption: null,
-        isCover: false,
-        sortOrder: 2,
       },
     ],
   },
@@ -200,10 +135,8 @@ export const projects: ProjectWithRelations[] = [
     year: 2025,
     location: 'Mandera Town, Mandera County',
     client: 'Takbir Investments Ltd',
-    coverImage:
-      'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=85&auto=format&fit=crop',
-    heroImage:
-      'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=85&auto=format&fit=crop',
+    coverImage: images.projects.takbirMandera,
+    heroImage: images.projects.takbirMandera,
     categoryId: 2,
     serviceId: 1,
     createdAt: '2025-01-01T00:00:00.000Z',
@@ -213,29 +146,11 @@ export const projects: ProjectWithRelations[] = [
       {
         id: 10,
         projectId: 4,
-        url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=85&auto=format&fit=crop',
+        url: images.projects.takbirMandera,
         alt: 'Takbir Service Station Mandera',
         caption: null,
         isCover: true,
         sortOrder: 0,
-      },
-      {
-        id: 11,
-        projectId: 4,
-        url: STATIC_IMAGES.interior,
-        alt: 'Takbir Mandera interior',
-        caption: null,
-        isCover: false,
-        sortOrder: 1,
-      },
-      {
-        id: 12,
-        projectId: 4,
-        url: STATIC_IMAGES.detail,
-        alt: 'Takbir Mandera detail',
-        caption: null,
-        isCover: false,
-        sortOrder: 2,
       },
     ],
   },

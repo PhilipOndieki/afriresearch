@@ -66,7 +66,7 @@ export default function AboutPage() {
       {/* Header */}
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <Image
-          src={images.about.nairobi}
+          src={images.about.aboutbgbanner}
           alt="Nairobi — Insight AfriResearch"
           fill
           priority

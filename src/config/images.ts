@@ -36,6 +36,7 @@ export const images = {
     siteVisit: q('/photo-1504307651254-35680f356dfd'),
   },
   training: {
+    trainingbgbanner: '/images/training/trainingbg.webp',
     workshop: q('/photo-1524178232363-1fb2b075b655'),
     classroom: q('/photo-1580582932707-520aed937b7b'),
     fieldwork: q('/photo-1503387762-592deb58ef4e'),
@@ -62,6 +63,7 @@ export const images = {
     building: q('/photo-1486325212027-8081e485255e'),
   },
   contact: {
+    contactbgbanner: '/images/contact/contactbg.webp',
     mapBg: q('/photo-1449824913935-59a10b8d2000'),
     office: q('/photo-1497366216548-37526070297c'),
   },

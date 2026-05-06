@@ -46,7 +46,7 @@ export default function ContactPage() {
       {/* Header */}
       <section className="relative h-[45vh] min-h-[320px] flex items-end overflow-hidden">
         <Image
-          src={images.contact.mapBg}
+          src={images.contact.contactbgbanner}
           alt="Contact — Insight AfriResearch"
           fill
           priority

@@ -26,7 +26,7 @@ export default function TrainingPage() {
       {/* Header */}
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <Image
-          src={images.training.hero}
+          src={images.training.trainingbgbanner}
           alt="Training and capacity building"
           fill
           priority

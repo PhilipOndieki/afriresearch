@@ -23,7 +23,7 @@ export function ServicesEditorial({ services }: ServicesEditorialProps) {
             <div
               className={`relative min-h-[60vh] lg:min-h-screen ${isEven ? 'lg:order-first' : 'lg:order-last'}`}
             >
-              <ParallaxImage className="h-full w-full" speed={0.15}>
+              <ParallaxImage className="absolute inset-0" speed={0.15}>
                 <Image
                   src={service.heroImage}
                   alt={service.name}

@@ -42,8 +42,8 @@ export function ParallaxImage({ children, className, speed = 0.2 }: ParallaxImag
   }, [speed]);
 
   return (
-    <div ref={ref} className={cn('overflow-hidden', className)}>
-      <div data-parallax-inner className="scale-110">
+    <div ref={ref} className={cn('overflow-hidden relative', className)}>
+      <div data-parallax-inner className="scale-110 h-full w-full absolute inset-0">
         {children}
       </div>
     </div>

@@ -48,7 +48,7 @@ export const images = {
     siteTools: q('/photo-1504307651254-35680f356dfd'),
   },
   services: {
-    servicesbgbanner: 'images/services/servicesbg.webp',
+    servicesbgbanner: '/images/services/servicesbg.webp',
     architecture: '/images/services/architecture.webp',
     engineering: '/images/services/engineering.webp',
     research: '/images/services/research.webp',

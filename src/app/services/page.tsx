@@ -20,7 +20,7 @@ export default function ServicesPage() {
       {/* Page header */}
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <Image
-          src={images.hero.concrete}
+          src={images.services.servicesbgbanner}
           alt="Services — Insight AfriResearch"
           fill
           priority

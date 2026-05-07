@@ -156,26 +156,6 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
-
-      {/* Team — dark colour scene */}
-      <ScrollColourScene bgColor={tokens.colors.foreground} fgColor={tokens.colors.background}>
-        <section className="section-pad bg-foreground">
-          <div className="container-site">
-            <SectionHeading
-              label="The team"
-              title="Professionals you can call by name."
-              className="mb-12 [&_h2]:text-background [&_.label-text]:text-background/50"
-            />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {activeTeam.map((member, i) => (
-                <FadeUp key={member.id} delay={i * 0.1}>
-                  <TeamCard member={member} />
-                </FadeUp>
-              ))}
-            </div>
-          </div>
-        </section>
-      </ScrollColourScene>
     </PageShell>
   );
 }

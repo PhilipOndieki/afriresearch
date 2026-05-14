@@ -12,6 +12,7 @@ import { useUiStore } from '@/store/uiStore';
 import { cn } from '@/utils/cn';
 
 const NAV_PREVIEWS: Record<string, string> = {
+  '/hr-consultancy': 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=85&auto=format&fit=crop',
   '/services': images.services.architecture,
   '/projects': projects[0]?.coverImage ?? images.projects.aljazeraResidency,
   '/about': images.about.teamPhoto,

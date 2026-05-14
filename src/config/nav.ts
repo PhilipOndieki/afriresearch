@@ -5,6 +5,7 @@ export type NavItem = {
 };
 
 export const navItems: NavItem[] = [
+  { label: 'HR Consultancy', href: '/hr-consultancy', description: 'Human resource services' },
   { label: 'Services', href: '/services', description: 'What we do' },
   { label: 'Projects', href: '/projects', description: 'Selected work' },
   { label: 'About', href: '/about', description: 'Who we are' },
@@ -14,6 +15,7 @@ export const navItems: NavItem[] = [
 
 export const footerLinks = {
   services: [
+    { label: 'HR Consultancy', href: '/hr-consultancy' },
     { label: 'Architectural Design', href: '/services#architectural-design' },
     { label: 'Engineering Services', href: '/services#engineering-services' },
     { label: 'Research and Consultancy', href: '/services#research-consultancy' },

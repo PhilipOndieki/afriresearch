@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: 'Insight AfriResearch Ltd',
-  tagline: 'Design. Research. Training.',
+  tagline: 'HR. Research. Architecture.',
   description:
-    'Nairobi-based multidisciplinary firm specialising in Architectural Design, Engineering Services, Research and Consultancy, Training and Capacity Building, and Project Supervision.',
+    'Nairobi-based multidisciplinary firm specialising in Human Resource Management, Research and Consultancy, and Architectural Design across East Africa.',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://insightafriresearch.com',
   contact: {
     email: 'insightafri@gmail.com',

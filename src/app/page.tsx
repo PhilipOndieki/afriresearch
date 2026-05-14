@@ -29,10 +29,10 @@ const clientTypes = [
 ];
 
 const stats = [
-  { value: '25+', label: 'Projects completed' },
-  { value: '12', label: 'Counties served' },
-  { value: '7', label: 'Years in practice' },
-  { value: '4', label: 'Countries' },
+  { value: '50+', label: 'Organisations served' },
+  { value: '12',  label: 'Counties reached' },
+  { value: '7',   label: 'Years in practice' },
+  { value: '4',   label: 'Countries' },
 ];
 
 export default function HomePage() {
@@ -51,8 +51,9 @@ export default function HomePage() {
             <div>
               <SectionHeading
                 label="Who we are"
-                title="A firm built for the complexity of African development."
-                subtitle="We combine architectural rigour, engineering depth, and applied research to deliver buildings, infrastructure, and knowledge that last."
+                title="People, research, and the built environment."
+                subtitle="We combine HR expertise, applied research, and architectural capability 
+                            to help organisations and governments make better decisions and build better."
               />
               <FadeUp delay={0.3}>
                 <div className="flex flex-col xs:flex-row sm:flex-row gap-3 sm:gap-4 mt-8">

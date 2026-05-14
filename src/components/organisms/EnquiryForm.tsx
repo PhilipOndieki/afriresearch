@@ -7,12 +7,12 @@ import { enquirySchema } from '@/schemas/enquiry.schema';
 import { cn } from '@/utils/cn';
 
 const SERVICE_OPTIONS = [
-  { value: 'architectural-design', label: 'Architectural Design' },
-  { value: 'engineering-services', label: 'Engineering Services' },
-  { value: 'research-consultancy', label: 'Research and Consultancy' },
+  { value: 'human-resource-management', label: 'Human Resource Management' },
+  { value: 'research-consultancy',      label: 'Research and Consultancy' },
+  { value: 'architectural-design',      label: 'Architectural Design' },
   { value: 'training-capacity-building', label: 'Training and Capacity Building' },
-  { value: 'project-supervision', label: 'Project Supervision' },
-  { value: 'other', label: 'Other' },
+  { value: 'project-supervision',        label: 'Project Supervision' },
+  { value: 'other',                      label: 'Other' },
 ];
 
 type FormState = {

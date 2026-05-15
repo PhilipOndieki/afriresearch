@@ -50,6 +50,7 @@ export const images = {
   },
   services: {
     servicesbgbanner: '/images/services/servicesbg.webp',
+    hrmanagement: '/images/services/hrmanagement.webp',
     architecture: '/images/services/architecture.webp',
     engineering: '/images/services/engineering.webp',
     research: '/images/services/research.webp',

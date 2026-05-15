@@ -8,7 +8,7 @@ export const services: Service[] = [
     name: 'Human Resource Management',
     headline: 'People strategy that drives organisational performance.',
     description: 'We support organisations across East Africa with HR consulting, workforce planning, job evaluation, staff training, and institutional capacity assessments...',
-    heroImage: images.services.research, // swap image later
+    heroImage: images.services.hrmanagement, // swap image later
     sortOrder: 1,
   },
   {

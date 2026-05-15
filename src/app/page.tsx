@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar } from '@/components/organisms/Navbar';
 import { Footer } from '@/components/organisms/Footer';
-import { HeroSlideshow } from '@/components/organisms/HeroSlideshow';
+import { HeroStatic } from '@/components/organisms/HeroStatic';
 import { EnquiryForm } from '@/components/organisms/EnquiryForm';
 import { ProjectCard } from '@/components/molecules/ProjectCard';
 import { SectionHeading } from '@/components/molecules/SectionHeading';
@@ -43,7 +43,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         {/* ── Hero ─────────────────────────────────────────────────── */}
-        <HeroSlideshow />
+        <HeroStatic />
 
         {/* ── Who we are ───────────────────────────────────────────── */}
         <section className="section-pad container-site">
@@ -71,20 +71,12 @@ export default function HomePage() {
               <div className="relative mt-4 lg:mt-0">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
-                    src="/images/nairobibuilding.webp"
+                    src="/images/whowearelady.jpg"
                     alt="Architectural design by Insight AfriResearch"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
                   />
-                </div>
-                {/* Accent box: only show when grid is two-column (lg+) */}
-                <div className="absolute -bottom-6 -left-6 bg-accent p-4 sm:p-6 hidden lg:block">
-                  <p className="font-serif text-display-sm text-background leading-tight">
-                    Nairobi
-                    <br />
-                    Kenya
-                  </p>
                 </div>
               </div>
             </ScrollReveal>

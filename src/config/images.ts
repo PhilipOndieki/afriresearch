@@ -37,7 +37,7 @@ export const images = {
   },
   training: {
     trainingbgbanner: '/images/training/trainingbg.webp',
-    workshop: q('/photo-1524178232363-1fb2b075b655'),
+    workshop: '/images/training/workshop.webp',
     classroom: q('/photo-1580582932707-520aed937b7b'),
     fieldwork: q('/photo-1503387762-592deb58ef4e'),
     hero: q('/photo-1524178232363-1fb2b075b655', 1920),
@@ -59,8 +59,8 @@ export const images = {
   },
   about: {
     aboutbgbanner: '/images/about/aboutbg.webp',
-    office: q('/photo-1497366216548-37526070297c'),
-    teamPhoto: q('/photo-1522071820081-009f0129c71c'),
+    office: '/images/about/office.webp',
+    teamPhoto: '/images/about/teamphoto.webp',
     building: q('/photo-1486325212027-8081e485255e'),
   },
   contact: {

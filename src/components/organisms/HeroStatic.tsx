@@ -82,7 +82,7 @@ export function HeroStatic() {
         className="hidden lg:block absolute right-0 top-0 bottom-0 w-[52%] opacity-0"
       >
         <Image
-          src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1400&q=85&auto=format&fit=crop"
+          src="/images/heroimg.webp"
           alt="HR professionals in a strategic meeting"
           fill
           priority

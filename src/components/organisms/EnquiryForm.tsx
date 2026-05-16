@@ -162,7 +162,7 @@ export function EnquiryForm({ className }: { className?: string }) {
         </p>
       )}
 
-      <Button type="submit" loading={status === 'loading'} className="w-full sm:w-auto">
+      <Button type="submit" variant="outline" loading={status === 'loading'} className="w-full sm:w-auto">
         Send Enquiry
       </Button>
     </form>

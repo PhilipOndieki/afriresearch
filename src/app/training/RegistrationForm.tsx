@@ -126,7 +126,12 @@ export function RegistrationForm({ sessions }: RegistrationFormProps) {
           Registration failed. Please try again.
         </p>
       )}
-      <Button type="submit" loading={status === 'loading'}>
+      <Button
+        type="submit"
+        variant="outline"
+        loading={status === 'loading'}
+        className="w-full sm:w-auto"
+      >
         Register Now
       </Button>
     </form>

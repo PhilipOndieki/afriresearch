@@ -22,7 +22,7 @@ export default function HrConsultancyPage() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
       <Image
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=85&auto=format&fit=crop"
+          src="/images/hrbgimage.webp"
           alt="HR Consultancy — Insight AfriResearch"
           fill
           priority
@@ -56,7 +56,7 @@ export default function HrConsultancyPage() {
           <ScrollReveal from="right">
             <div className="relative aspect-[4/3] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=85&auto=format&fit=crop"
+                src="/images/hrconsultant.webp"
                 alt="HR team working"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -154,7 +154,7 @@ export default function HrConsultancyPage() {
       {/* ── Full bleed image ─────────────────────────────── */}
       <ParallaxImage className="h-[45vh]" speed={0.15}>
         <Image
-          src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920&q=85&auto=format&fit=crop"
+          src="/images/hrinpractice.webp"
           alt="HR consultancy in practice"
           fill
           sizes="100vw"

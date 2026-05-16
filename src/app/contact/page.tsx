@@ -82,13 +82,13 @@ export default function ContactPage() {
             <FadeUp>
               <div className="aspect-[4/3] w-full overflow-hidden border border-border">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8177!2d36.8166!3d-1.2833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10cf61c40c5b%3A0x1e1a9a2b2c3d4e5f!2sHughes+Building%2C+Kenyatta+Avenue%2C+Nairobi!5e0!3m2!1sen!2ske!4v1234567890"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8155874782424!2d36.81802917411528!3d-1.2845848356224776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11008d8247bb%3A0xa8fddc8e08f0cac8!2sHughes%20Building!5e0!3m2!1sen!2ske!4v1778905306281!5m2!1sen!2ske"
                   width="100%"
                   height="100%"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="grayscale hover:grayscale-0 transition-all duration-600"
-                  title="Insight AfriResearch office"
+                  title="Muindi Mbingu Street"
                 />
               </div>
             </FadeUp>
@@ -101,7 +101,7 @@ export default function ContactPage() {
                   <address className="font-sans text-body-md text-foreground not-italic">
                     4th Floor, Hughes Building
                     <br />
-                    Kenyatta Avenue
+                    Muindi Mbingu Street
                     <br />
                     Nairobi, Kenya
                   </address>
